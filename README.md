@@ -55,7 +55,7 @@ Click the settings button to configure:
 
 ## API Documentation
 
-The application uses the Kevel Ad Decision API. For more information about the API and its capabilities, visit the [AdQuery knowledge base page](https://dev.kevel.com/docs/adquery#phrase-or-fuzzy-matching).
+The application uses the Kevel Ad Decision API. For more information about the API and its capabilities, visit https://dev.kevel.com.
 
 ## Contributing
 
