@@ -1,13 +1,18 @@
 const express = require('express');
 const cors = require('cors');
 const fetch = require('node-fetch');
+const path = require('path');
 const app = express();
-const port = 3000;
+
+// Get port from environment variable or use default
+const port = process.env.PORT || 3000;
+const isProduction = process.env.NODE_ENV === 'production';
+const basePath = isProduction ? '/kevel-search-playground' : '';
 
 // Middleware
 app.use(cors());
 app.use(express.json());
-app.use(express.static('.')); // Serve static files from the root directory
+app.use(basePath, express.static(path.join(__dirname, '.'))); // Serve static files with base path
 
 // Log all requests
 app.use((req, res, next) => {
@@ -16,7 +21,7 @@ app.use((req, res, next) => {
 });
 
 // API endpoint to proxy Adzerk requests
-app.post('/api/search', async (req, res) => {
+app.post(`${basePath}/api/search`, async (req, res) => {
   console.log('Received search request:', req.body);
   
   const { query, phraseMatch, networkId, siteId, adTypes, count, fieldName, imageField, userKey } = req.body;
@@ -36,7 +41,7 @@ app.post('/api/search', async (req, res) => {
         siteId: siteId,
         adTypes: adTypes.split(',').map(type => parseInt(type.trim())),
         count: parseInt(count),
-        adQuery: { [fieldName]: { eq: query, phraseMatch } }
+        adQuery: { [`ct${fieldName}`]: { eq: query, phraseMatch } }
       }]
     };
 
@@ -67,8 +72,13 @@ app.post('/api/search', async (req, res) => {
 });
 
 // Handle OPTIONS requests for CORS
-app.options('/api/search', cors());
+app.options(`${basePath}/api/search`, cors());
+
+// Serve index.html for all other routes
+app.get(`${basePath}*`, (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
 
 app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+  console.log(`Server running on port ${port} with base path ${basePath || '/'}`);
 }); 

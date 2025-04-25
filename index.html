@@ -4,6 +4,16 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kevel Search Playground</title>
+  <script>
+    // Set global environment variable
+    window.APP_ENV = {
+      isProduction: window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1',
+      basePath: window.location.hostname !== 'localhost' && window.location.hostname !== '127.0.0.1' ? '/kevel-search-playground' : ''
+    };
+    if (window.APP_ENV.isProduction) {
+      document.write('<base href="/kevel-search-playground/">');
+    }
+  </script>
   <link href="img/favicon.png" rel="shortcut icon" type="image/x-icon">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <!-- Font Awesome -->

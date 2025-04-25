@@ -1,6 +1,7 @@
 // Initialize Highlight.js
 hljs.highlightAll();
 
+// Verify elements exist
 const input = document.getElementById('search-input');
 const toggle = document.getElementById('phrase-match');
 const codeSnippet = document.getElementById('code-snippet');
@@ -12,6 +13,16 @@ const settingsButton = document.getElementById('settings-button');
 const settingsModal = document.getElementById('settings-modal');
 const closeButton = document.querySelector('.close-button');
 const settingsForm = document.getElementById('settings-form');
+
+// Verify required elements exist
+if (!codeSnippet) {
+  console.error('codeSnippet element not found!');
+} else {
+  console.log('codeSnippet element found:', codeSnippet);
+}
+
+// Use global environment variables
+const basePath = window.APP_ENV.basePath;
 
 // Prefill from URL
 const params = new URLSearchParams(window.location.search);
@@ -98,7 +109,9 @@ settingsForm.addEventListener('submit', (event) => {
 function updateSnippet() {
   const query = input.value;
   const pm = toggle.checked;
+  console.log('Updating snippet with:', { query, pm, fieldName: settings.fieldName });
   const snippet = `adQuery: {ct${settings.fieldName}: {eq: "${query}", phraseMatch: ${pm}}}`;
+  console.log('Generated snippet:', snippet);
   codeSnippet.textContent = snippet;
   hljs.highlightElement(codeSnippet);
 }
@@ -119,7 +132,7 @@ function createCard(item) {
   img.src = item.contents[0].data[`ct${settings.imageField}`];
   img.alt = item.contents[0].data[`ct${settings.fieldName}`];
   img.onerror = () => {
-    img.src = 'img/placeholder.svg';
+    img.src = `${basePath}/img/placeholder.svg`;
     img.alt = 'Placeholder image';
   };
   
@@ -142,7 +155,7 @@ async function runSearch() {
 
   try {
     console.log('Sending search request:', { query, phraseMatch, ...settings });
-    const response = await fetch('/api/search', {
+    const response = await fetch(`${basePath}/api/search`, {
       method: 'POST',
       headers: { 
         'Content-Type': 'application/json',
@@ -190,16 +203,28 @@ async function runSearch() {
 }
 
 // Event listeners
-input.addEventListener('input', updateSnippet);
-toggle.addEventListener('change', updateSnippet);
+console.log('Setting up event listeners');
+input.addEventListener('input', () => {
+  console.log('Input changed');
+  updateSnippet();
+});
+toggle.addEventListener('change', () => {
+  console.log('Toggle changed');
+  updateSnippet();
+});
 searchForm.addEventListener('submit', e => {
+  console.log('Form submitted');
   e.preventDefault();
   runSearch();
 });
 
 // Initialize snippet and auto-trigger search if prefetched
+console.log('Initializing snippet');
 updateSnippet();
-if (initialQuery) runSearch();
+if (initialQuery) {
+  console.log('Initial query found:', initialQuery);
+  runSearch();
+}
 
 // Display search results
 function displayResults(data) {
