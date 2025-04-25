@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kevel Search Playground</title>
+  <link href="img/favicon.png" rel="shortcut icon" type="image/x-icon">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <!-- Highlight.js for syntax highlighting -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/atom-one-dark.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js"></script>
+  <link rel="stylesheet" href="css/styles.css">
+  <!-- Google Analytics script -->
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-2GZ5ZCEBEQ"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+
+    gtag('config', 'G-2GZ5ZCEBEQ');
+  </script>
+</head>
+<body>
+  
+  <div class="info-box collapsed">
+    <div class="info-box-header">
+      <h3>What is this?</h3>
+      <div class="header-buttons">
+        <button id="settings-button" class="settings-button">
+          <i class="fas fa-gear"></i>
+          Settings
+        </button>
+        <button class="collapse-button">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M4 6L8 10L12 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="info-box-content">
+      <p>Use this tool to test phrase matching in the Kevel Ad Decision API. Run a search using our demo network or adjust options in the settings panel to test with your own account.<br><br>Visit the <a href="https://dev.kevel.com/docs/adquery#phrase-or-fuzzy-matching" target="_blank">AdQuery knowledge base page</a> for examples and setup details.</p>
+    </div>
+  </div>
+  <div class="logo-container">
+    <img src="img/Kevel-Ad-Server-dark.png" alt="Kevel Logo" />
+  </div>
+  <form id="search-form">
+    <div class="search-wrapper">
+      <span class="icon"><img src="img/search_icon.svg" alt="Search icon"></span>
+      <input type="text" id="search-input" placeholder="Enter search term" required />
+      <div class="toggle-wrapper">
+        <span class="label-text">Phrase Match</span>
+        <label class="switch">
+          <input type="checkbox" id="phrase-match">
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+  </form>
+
+  <div id="settings-modal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Search Settings</h2>
+        <button class="close-button">&times;</button>
+      </div>
+      <form id="settings-form">
+        <div class="form-group">
+          <label for="network-id">Network ID</label>
+          <input type="number" id="network-id" name="networkId" value="11754" min="1" required>
+        </div>
+        <div class="form-group">
+          <label for="site-id">Site ID</label>
+          <input type="number" id="site-id" name="siteId" value="1302966" min="1" required>
+        </div>
+        <div class="form-group">
+          <label for="ad-types">Ad Types (comma-separated numbers)</label>
+          <input type="text" id="ad-types" name="adTypes" value="320" pattern="^\d+(,\s*\d+)*$" title="Enter comma-separated numbers" required>
+        </div>
+        <div class="form-group">
+          <label for="count">Multi-winner count</label>
+          <input type="number" id="count" name="count" value="10" min="1" required>
+        </div>
+        <div class="form-group">
+          <label for="field-name">Creative Template Field Name to Query</label>
+          <div class="prefix-input">
+            <span class="prefix">ct</span>
+            <input type="text" id="field-name" name="fieldName" value="title" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="image-field">Image Field Name</label>
+          <div class="prefix-input">
+            <span class="prefix">ct</span>
+            <input type="text" id="image-field" name="imageField" value="image" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="user-key">User Key</label>
+          <input type="text" id="user-key" name="userKey">
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="save-button">Save Settings</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <pre><code id="code-snippet" class="language-javascript" aria-live="polite"></code></pre>
+
+  <div id="results-section">
+    <h2 id="results-heading"></h2>
+    <div id="result"></div>
+  </div>
+
+  <script src="js/main.js"></script>
+</body>
+</html>
