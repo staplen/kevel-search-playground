@@ -1,0 +1,20 @@
+# Enable rewrite engine
+RewriteEngine On
+RewriteBase /kevel-search-playground/
+
+# Don't rewrite files or directories
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+
+# Rewrite everything else to the Node.js application
+RewriteRule ^(.*)$ http://localhost:3000/kevel-search-playground/$1 [P]
+
+# Proxy settings
+ProxyPassReverse / http://localhost:3000/
+ProxyPreserveHost On
+
+# Security headers
+Header set X-Content-Type-Options "nosniff"
+Header set X-Frame-Options "DENY"
+Header set X-XSS-Protection "1; mode=block"
+Header set Strict-Transport-Security "max-age=31536000; includeSubDomains" 

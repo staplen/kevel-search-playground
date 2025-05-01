@@ -1,73 +1,74 @@
 # Kevel Search Playground
 
-A web application for testing phrase matching in the Kevel Ad Decision API. This tool allows you to test search functionality using either the demo network or your own account settings.
+A simple web application for testing and visualizing search functionality with Kevel's API.
 
 ## Features
 
-- Real-time search with phrase matching support
-- Configurable settings for network, site, and ad types
-- Responsive design with modern UI
-- Code snippet generation for API calls
-- Settings persistence using localStorage
+- Real-time search visualization
+- Phrase match toggle
+- Customizable search parameters
+- Responsive design
+- Local storage for settings
 
-## Prerequisites
+## Requirements
 
-- Node.js (v14 or higher)
-- npm (v6 or higher)
+- PHP 7.4 or higher
+- Web server (Apache/Nginx)
+- Modern web browser
 
 ## Installation
 
 1. Clone the repository:
 ```bash
-git clone https://github.com/yourusername/kevel-search.git
-cd kevel-search
+git clone https://github.com/yourusername/kevel-search-playground.git
+cd kevel-search-playground
 ```
 
-2. Install dependencies:
+2. Configure your web server:
+   - For Apache, ensure mod_rewrite is enabled
+   - Point your web server to the project directory
+   - Make sure the .htaccess file is being read
+
+3. Access the application through your web server:
+```
+http://your-domain.com/kevel-search-playground/
+```
+
+## Development
+
+To run locally:
 ```bash
-npm install
+php -S localhost:8000
 ```
 
-3. Start the development server:
-```bash
-npm start
+Then open http://localhost:8000 in your browser.
+
+## Configuration
+
+The application uses a PHP proxy (proxy.php) to handle API requests. No additional configuration is needed.
+
+## File Structure
+
 ```
-
-The application will be available at `http://localhost:3000`.
-
-## Usage
-
-1. Enter a search term in the input field
-2. Toggle phrase matching if desired
-3. Click the search button or press Enter
-4. View the results and generated API code snippet
-
-### Settings
-
-Click the settings button to configure:
-- Network ID
-- Site ID
-- Ad Types
-- Multi-winner count
-- Creative Template Field Name
-- Image Field Name
-- User Key
-
-## API Documentation
-
-The application uses the Kevel Ad Decision API. For more information about the API and its capabilities, visit https://dev.kevel.com.
-
-## Contributing
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+kevel-search-playground/
+├── css/
+│   └── styles.css
+├── img/
+│   ├── favicon.png
+│   ├── Kevel-Ad-Server-dark.png
+│   ├── placeholder.svg
+│   └── search_icon.svg
+├── js/
+│   └── main.js
+├── .htaccess
+├── index.html
+├── proxy.php
+└── README.md
+```
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+MIT License
 
 ## Acknowledgments
 

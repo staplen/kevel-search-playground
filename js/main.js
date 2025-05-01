@@ -154,23 +154,21 @@ async function runSearch() {
   }
 
   try {
-    console.log('Sending search request:', { query, phraseMatch, ...settings });
-    const response = await fetch(`${basePath}/api/search`, {
+    const response = await fetch('proxy.php', {
       method: 'POST',
-      headers: { 
+      headers: {
         'Content-Type': 'application/json',
-        'Accept': 'application/json'
       },
       body: JSON.stringify({
         query,
         phraseMatch,
-        networkId: settings.networkId,
-        siteId: settings.siteId,
-        adTypes: settings.adTypes,
-        count: settings.count,
-        fieldName: settings.fieldName,
-        imageField: settings.imageField,
-        userKey: settings.userKey
+        networkId: document.getElementById('network-id').value,
+        siteId: document.getElementById('site-id').value,
+        adTypes: document.getElementById('ad-types').value,
+        count: document.getElementById('count').value,
+        fieldName: document.getElementById('field-name').value,
+        imageField: document.getElementById('image-field').value,
+        userKey: document.getElementById('user-key').value
       })
     });
     
