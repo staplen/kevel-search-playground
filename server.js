@@ -2,6 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const fetch = require('node-fetch');
 const path = require('path');
+const compression = require('compression');
 const app = express();
 
 // Get port from environment variable or use default
@@ -10,19 +11,35 @@ const isProduction = process.env.NODE_ENV === 'production';
 const basePath = isProduction ? '/kevel-search-playground' : '';
 
 // Middleware
+app.use(compression()); // Add compression
 app.use(cors());
 app.use(express.json());
-app.use(basePath, express.static(path.join(__dirname, '.'))); // Serve static files with base path
 
-// Log all requests
+// Security headers
 app.use((req, res, next) => {
-  console.log(`${req.method} ${req.url}`);
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
   next();
 });
 
+app.use(basePath, express.static(path.join(__dirname, '.'), {
+  maxAge: isProduction ? '1d' : 0 // Cache for 1 day in production
+}));
+
+// Log all requests only in development
+if (!isProduction) {
+  app.use((req, res, next) => {
+    console.log(`${req.method} ${req.url}`);
+    next();
+  });
+}
+
 // API endpoint to proxy Adzerk requests
 app.post(`${basePath}/api/search`, async (req, res) => {
-  console.log('Received search request:', req.body);
+  if (!isProduction) {
+    console.log('Received search request:', req.body);
+  }
   
   const { query, phraseMatch, networkId, siteId, adTypes, count, fieldName, imageField, userKey } = req.body;
   
@@ -45,7 +62,9 @@ app.post(`${basePath}/api/search`, async (req, res) => {
       }]
     };
 
-    console.log('Sending request to Adzerk with body:', JSON.stringify(adzerkRequestBody, null, 2));
+    if (!isProduction) {
+      console.log('Sending request to Adzerk with body:', JSON.stringify(adzerkRequestBody, null, 2));
+    }
     
     const response = await fetch(`https://e-${networkId}.adzerk.net/api/v2`, {
       method: 'POST',
@@ -58,15 +77,21 @@ app.post(`${basePath}/api/search`, async (req, res) => {
 
     if (!response.ok) {
       const errorText = await response.text();
-      console.error('Adzerk API error:', errorText);
+      if (!isProduction) {
+        console.error('Adzerk API error:', errorText);
+      }
       return res.status(response.status).json({ error: 'Adzerk API error', details: errorText });
     }
 
     const data = await response.json();
-    console.log('Successfully received response from Adzerk API');
+    if (!isProduction) {
+      console.log('Successfully received response from Adzerk API');
+    }
     res.json(data);
   } catch (error) {
-    console.error('Error proxying request to Adzerk:', error);
+    if (!isProduction) {
+      console.error('Error proxying request to Adzerk:', error);
+    }
     res.status(500).json({ error: 'Failed to fetch results', details: error.message });
   }
 });

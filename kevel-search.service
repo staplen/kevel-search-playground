@@ -1,0 +1,15 @@
+[Unit]
+Description=Kevel Search Playground
+After=network.target
+
+[Service]
+Environment=NODE_ENV=production
+Environment=PORT=3000
+Type=simple
+User=www-data
+WorkingDirectory=/var/www/kevel-search-playground
+ExecStart=/usr/bin/node server.js
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target 
